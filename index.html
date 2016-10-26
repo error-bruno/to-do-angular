@@ -6,10 +6,10 @@
     <title>todo</title>
   </head>
   <body ng-app="todo">
-    <a ui-sref="hello" ui-sref-active="active">Hello</a>
-    <a ui-sref="about" ui-sref-active="active">About</a>
+    <a ui-sref="todos" ui-sref-active="active">Todos</a>
 
-    <ui-view></ui-view>
+    <div ui-view="filters"></div>
+    <div ui-view="todoList"></div>
 
     <script src="/assets/js/vendors.js"></script>
 

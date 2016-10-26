@@ -18,7 +18,8 @@
   "homepage": "https://github.com/error-bruno/to-do-angular#readme",
   "dependencies": {
     "angular": "^1.3.20",
-    "angular-ui-router": "^0.3.1"
+    "angular-ui-router": "^0.3.1",
+    "moment": "^2.15.2"
   },
   "devDependencies": {
     "del": "^2.2.2",
