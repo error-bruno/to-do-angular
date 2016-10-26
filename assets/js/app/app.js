@@ -19,13 +19,17 @@ myApp.config(function($stateProvider) {
     url: '/todos',
     views: {
       filters: {
-        template: '<div>Filters TBD</div>'
+        template: [
+          '<ul>',
+            '<li><input type="checkbox" ng-model="checkboxModel.value2">Show Completed</li>',
+          '</ul>'
+        ].join('')
       },
       todoList: {
         resolve: {
           todos: function(sessionStore) {
             return sessionStore.getObject('todos', []);
-          }
+          },
         },
         controller: 'todoListController as todoListCtrl',
         template: [
@@ -52,7 +56,7 @@ myApp.config(function($stateProvider) {
                 '</p>',
                 '<p ng-if="todo.dueDate">',
                   'Due By: {{todo.dueDate | date}} {{todoListCtrl.today | date}}',
-                  '<span ng-if="todoListCtrl.today > item.dueDate">OverDue</span>',
+                  '<span ng-if="todoListCtrl.today > todo.dueDate">OverDue</span>',
                 '</p>',
                 '<p>',
                   'Created On: {{todo.createdOn | date}}',
