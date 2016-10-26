@@ -27,9 +27,14 @@ gulp.task('views', function(done) {
     .on('end', done);
 });
 
+gulp.task('vendors', function() {
+  gulp.src(paths.vendors)
+    .pipe(concat('vendors.js'))
+    .pipe(gulp.dest('./public/assets/js/'))
+});
+
 gulp.task('inject', function(done) {
   gulp.src('./public/index.html')
-    .pipe(inject(gulp.src(paths.vendors, {read: false}), {starttag: '<!-- inject:vendors:{{ext}} -->'}))
     .pipe(inject(gulp.src(['assets/js/app/**/*.js'], {read: false})))
     .pipe(gulp.dest('./public/'))
     .on('end', done);
@@ -45,8 +50,7 @@ gulp.task('connect', function() {
     middleware: function() {
       return [
         function (req, res, next) {
-          if (req.url.indexOf('/assets') === 0) {
-            console.log('yayay')
+          if (req.url.indexOf('/assets/js/app') === 0) {
             fileServer.serve(req, res);
           } else {
             next();
@@ -60,19 +64,18 @@ gulp.task('connect', function() {
 gulp.task('watch', function() {
   gulp.watch(['assets/js/app/**/*.js'], function(event) {
     if (event.type === 'added' || event.type === 'deleted') {
-      runSequence('clean', 'views', 'inject', 'reload-app');
+      runSequence('clean', 'views', 'vendors', 'inject', 'reload-app');
     } else {
       runSequence('reload-app');
     }
   });
 
-  gulp.watch('./public/index.html', function() {
-    runSequence('clean', 'views', 'inject',  'reload-app');
+  gulp.watch('./index.html', function() {
+    runSequence('clean', 'views', 'vendors', 'inject',  'reload-app');
   });
 });
 
 gulp.task('reload-app', function() {
-  console.log('reload')
   return gulp.src('public/index.html')
     .pipe(connect.reload());
 });
@@ -91,6 +94,7 @@ gulp.task('default', function(done) {
   runSequence(
     'clean',
     'views',
+    'vendors',
     'inject',
     ['connect', 'watch'],
     'open'

@@ -1,15 +1,17 @@
 <!DOCTYPE html>
-<html lang="en-us" data-ng-app="todo">
+<html lang="en-us">
   <head>
     <meta charset="utf-8">
 
     <title>todo</title>
   </head>
-  <body>
+  <body ng-app="todo">
+    <a ui-sref="hello" ui-sref-active="active">Hello</a>
+    <a ui-sref="about" ui-sref-active="active">About</a>
 
+    <ui-view></ui-view>
 
-    <!-- inject:vendors:js -->
-    <!-- endinject -->
+    <script src="/assets/js/vendors.js"></script>
 
     <!-- inject:js -->
     <!-- endinject -->
