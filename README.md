@@ -1,2 +1,5 @@
 # to-do-angular
-Angular todo 
+Angular todo
+
+npm install
+gulp
