@@ -47,9 +47,10 @@ myApp.config(function($stateProvider) {
                 '</p>',
                 '<p ng-if="todo.update"> ',
                   '<input ng-model="todo.item" />',
-                  '<a href="#" ng-click="todoListCtrl.updateTodo($event, $index, todo.item)">Save</a>',
+                  '<input type="date" ng-model="todo.dueDate" />',
+                  '<a href="#" ng-click="todoListCtrl.updateTodo($event, $index, todo.item, todo.dueDate)">Save</a>',
                 '</p>',
-                '<p>',
+                '<p ng-if="todo.dueDate">',
                   'Due By: {{todo.dueDate | date}} {{todoListCtrl.today | date}}',
                   '<span ng-if="todoListCtrl.today > item.dueDate">OverDue</span>',
                 '</p>',
@@ -57,7 +58,9 @@ myApp.config(function($stateProvider) {
                   'Created On: {{todo.createdOn | date}}',
                 '</p>',
                 '<p>',
-                  '<a href="#" ng-click="todoListCtrl.toggleUpdateTodo($event, $index, todo.update)">Update</a>',
+                  '<a href="#" ng-click="todoListCtrl.toggleUpdateTodo($event, $index, todo.update)">',
+                    '{{todo.update ? \'Cancel\' : \'Update\'}}',
+                  '</a>',
                   ' - <a href="#" ng-click="todoListCtrl.deleteTodo($event, $index)">Delete</a>',
                 '</p>',
               '</div>',
@@ -118,10 +121,11 @@ myApp
         _saveTodos(vm.data.items);
       };
 
-      vm.updateTodo = function(event, index, item) {
+      vm.updateTodo = function(event, index, item, dueDate) {
         event.preventDefault();
         vm.data.items[index].update = false;
         vm.data.items[index].item = item;
+        vm.data.items[index].dueDate = dueDate;
 
         _saveTodos(vm.data.items);
       };
