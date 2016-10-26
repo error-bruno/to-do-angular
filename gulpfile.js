@@ -7,6 +7,13 @@ var del = require('del');
 var runSequence = require('run-sequence');
 var _static = require('node-static');
 
+var paths = {
+  vendors: [
+    'node_modules/angular/angular.min.js',
+    'node_modules/angular-ui-router/release/angular-ui-router.min.js'
+  ]
+};
+
 gulp.task('clean', function() {
   return del([
     'public/app/index.html',
@@ -22,6 +29,7 @@ gulp.task('views', function(done) {
 
 gulp.task('inject', function(done) {
   gulp.src('./public/index.html')
+    .pipe(inject(gulp.src(paths.vendors, {read: false}), {starttag: '<!-- inject:vendors:{{ext}} -->'}))
     .pipe(inject(gulp.src(['assets/js/app/**/*.js'], {read: false})))
     .pipe(gulp.dest('./public/'))
     .on('end', done);
