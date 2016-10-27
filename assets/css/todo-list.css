@@ -1,0 +1,57 @@
+@media (min-width: 768px) {
+  .form-group.name {
+    width: 400px;
+  }
+
+  .form-group.name input {
+    width: 100% !important;
+  }
+}
+
+.form-group.due-date {
+  padding-top: 8px;
+}
+
+.form-group.due-date .input-group-btn button {
+  height: 30px;
+}
+
+.todo-item {
+  margin-top: 1em;
+}
+
+.todo-item h3 {
+  cursor: pointer;
+}
+
+.todo-item h3 span.label {
+  font-size: 12px;
+  vertical-align: middle;
+}
+
+.todo-item .create-date {
+  font-style: italic;
+}
+
+.todo-item .create-date a {
+  font-style: normal;
+}
+
+.datepicker.dropdown-menu {
+  width: 250px;
+  height: 270px;
+}
+.datepicker.dropdown-menu button {
+  outline: none;
+  border: 0px;
+}
+.datepicker.dropdown-menu tbody {
+  height: 180px;
+}
+.datepicker.dropdown-menu tbody button {
+  padding: 6px;
+}
+.datepicker.dropdown-menu.datepicker-mode-1 tbody button,
+.datepicker.dropdown-menu.datepicker-mode-2 tbody button {
+  height: 65px;
+}

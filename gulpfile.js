@@ -8,10 +8,15 @@ var runSequence = require('run-sequence');
 var _static = require('node-static');
 
 var paths = {
-  vendors: [
-    'node_modules/angular/angular.min.js',
-    'node_modules/angular-ui-router/release/angular-ui-router.min.js',
+  vendorJs: [
+    'node_modules/angular/angular.js',
+    'node_modules/angular-strap/dist/angular-strap.js',
+    'node_modules/angular-strap/dist/angular-strap.tpl.js',
+    'node_modules/angular-ui-router/release/angular-ui-router.js',
     'node_modules/moment/min/moment.min.js'
+  ],
+  vendorCss: [
+    'node_modules/bootstrap/dist/css/bootstrap.css'
   ]
 };
 
@@ -28,15 +33,12 @@ gulp.task('views', function(done) {
     .on('end', done);
 });
 
-gulp.task('vendors', function() {
-  gulp.src(paths.vendors)
-    .pipe(concat('vendors.js'))
-    .pipe(gulp.dest('./public/assets/js/'))
-});
-
 gulp.task('inject', function(done) {
+  var js = ['assets/js/app/**/*.js'];
+  var css = ['assets/css/*.css'];
+
   gulp.src('./public/index.html')
-    .pipe(inject(gulp.src(['assets/js/app/**/*.js'], {read: false})))
+    .pipe(inject(gulp.src([].concat(paths.vendorJs, paths.vendorCss, js, css), {read: false})))
     .pipe(gulp.dest('./public/'))
     .on('end', done);
 });
@@ -51,7 +53,9 @@ gulp.task('connect', function() {
     middleware: function() {
       return [
         function (req, res, next) {
-          if (req.url.indexOf('/assets/js/app') === 0) {
+          if (req.url.indexOf('/assets/') === 0) {
+            fileServer.serve(req, res);
+          } else if (req.url.indexOf('/node_modules/') === 0) {
             fileServer.serve(req, res);
           } else {
             next();
@@ -63,16 +67,16 @@ gulp.task('connect', function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch(['assets/js/app/**/*.js'], function(event) {
+  gulp.watch(['assets/**/*.*'], function(event) {
     if (event.type === 'added' || event.type === 'deleted') {
-      runSequence('clean', 'views', 'vendors', 'inject', 'reload-app');
+      runSequence('clean', 'views', 'inject', 'reload-app');
     } else {
       runSequence('reload-app');
     }
   });
 
   gulp.watch('./index.html', function() {
-    runSequence('clean', 'views', 'vendors', 'inject',  'reload-app');
+    runSequence('clean', 'views', 'inject', 'reload-app');
   });
 });
 
@@ -95,7 +99,6 @@ gulp.task('default', function(done) {
   runSequence(
     'clean',
     'views',
-    'vendors',
     'inject',
     ['connect', 'watch'],
     'open'

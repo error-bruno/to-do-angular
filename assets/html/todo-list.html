@@ -1,0 +1,57 @@
+<h1 class="page-header">
+  Todo List
+  <div class="btn-group pull-right" role="group" aria-label="...">
+    <button type="button" class="btn btn-default" ui-sref="all" ui-sref-active="active">All</button>
+    <button type="button" class="btn btn-default" ui-sref="active" ui-sref-active="active">Active</button>
+    <button type="button" class="btn btn-default" ui-sref="complete" ui-sref-active="active">Complete</button>
+  </div>
+</h1>
+<form class="form-inline" name="todoList" ng-submit="todoListCtrl.addTodo(todoList.$valid, todoListCtrl.data.item, todoListCtrl.data.dueDate)" novalidate>
+  <div class="form-group form-group-lg name" ng-class="{'has-error': todoList.item.$invalid && (todoList.item.$dirty || todoList.$submitted)}">
+    <input class="form-control" type="text" name="item" ng-model="todoListCtrl.data.item" required placeholder="What needs done?"/>
+  </div>
+  <div class="form-group form-group-sm due-date">
+    <label for="dueDate">Due date (optional)</label>
+    <p class="input-group">
+      <input type="text" class="form-control" name="dueDate" 
+        ng-model="todoListCtrl.data.dueDate" 
+        data-date-format="yyyy-MM-dd" 
+        data-date-type="unix" data-autoclose="1" bs-datepicker>
+      <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+    </p>
+  </div>
+  <button type="submit" class="btn btn-primary btn-sm">Add todo</button>
+</form>
+<div class="todo-item" ng-repeat="todo in todoListCtrl.data.items | orderBy:['complete', 'dueDate', 'createdOn'] | filter:todoListCtrl.viewFilter track by $index">
+  <h3 ng-if="!todo.update" ng-dblclick="todoListCtrl.toggleUpdateTodo(todo)">
+    <span class="glyphicon" aria-hidden="true" 
+      ng-class="{'glyphicon-unchecked': !todo.complete, 'glyphicon-check': todo.complete}" 
+      ng-click="todoListCtrl.toggleComplete(todo)"></span>
+    <span ng-class="{complete: todo.complete}">{{todo.item}}</span> 
+    <span ng-if="todo.dueDate && !todo.complete"
+      class="label"
+      ng-class="{'label-danger': todoListCtrl.today >= todo.dueDate, 'label-default': todoListCtrl.today < todo.dueDate}">
+      due {{todo.dueDate | fromNow}}
+    </span>
+  </h3>
+  <form ng-if="todo.update" class="form-inline" name="todoForm" ng-submit="todoListCtrl.updateTodo(todoForm.$valid, todo)" novalidate>
+    <div class="form-group form-group-lg name" ng-class="{'has-error': todoForm.item.$invalid && (todoForm.item.$dirty || todoForm.$submitted)}">
+      <input class="form-control" type="text" name="item" ng-model="todo._item" required placeholder="What needs done?"/>
+    </div>
+    <div class="form-group form-group-sm due-date">
+      <label for="dueDate">Due date (optional)</label>
+      <p class="input-group">
+        <input type="text" class="form-control" name="dueDate" 
+          ng-model="todo._dueDate" 
+          data-date-format="yyyy-MM-dd" 
+          data-date-type="unix" data-autoclose="1" bs-datepicker>
+        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+      </p>
+    </div>
+    <button type="submit" class="btn btn-primary btn-sm">Save</button>
+    <button type="button" class="btn btn-default btn-sm" ng-click="todo.update = false">Cancel</button>
+  </form>
+  <p class="create-date">
+    created {{todo.createdOn | fromNow}} <a href="#" ng-click="todoListCtrl.deleteTodo(todo)">Delete</a>
+  </p>
+</div>

@@ -4,14 +4,13 @@
     <meta charset="utf-8">
 
     <title>todo</title>
+    <!-- inject:css -->
+    <!-- endinject -->
   </head>
   <body ng-app="todo">
-    <a ui-sref="todos" ui-sref-active="active">Todos</a>
-
-    <div ui-view="filters"></div>
-    <div ui-view="todoList"></div>
-
-    <script src="/assets/js/vendors.js"></script>
+    <div class="container">
+      <div ui-view></div>
+    </div>
 
     <!-- inject:js -->
     <!-- endinject -->
